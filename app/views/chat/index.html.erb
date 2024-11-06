@@ -1,0 +1,25 @@
+<%= turbo_stream_from "messages" %>
+
+<%= form_with url: chat_send_message_path, method: :post, data: { turbo_stream: true } do |form| %>
+  <div class="field">
+    <%= form.text_area :user_message, placeholder: "Ask a question...", rows: 3 %>
+  </div>
+
+  <div class="field">
+    <%= form.select :model, options_for_select(['t5-small']), prompt: "Choose a model" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Send", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<div id="messages">
+  <!-- Messages will be appended here dynamically -->
+  <!-- This will render the user and model responses -->
+</div>
+
+<!-- Turbo Stream will automatically update this area when the response is appended -->
+<%= turbo_stream_from "messages" %>
+
+
