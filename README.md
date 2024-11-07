@@ -70,12 +70,21 @@ tokenizer.save_pretrained("./models/Llama-3.2-1B")
 
 Python Code for Chat with Model
 
-``` from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+``` 
+from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer, AutoConfig
 import sys
 
 def generate_response(model_name, user_input):
-    # Load the model and tokenizer from the local directory
-    model = AutoModelForSeq2SeqLM.from_pretrained(f'./models/{model_name}')
+    # Load the configuration to check model type
+    config = AutoConfig.from_pretrained(f'./models/{model_name}')
+
+    # Choose model class based on configuration
+    if config.model_type == "llama":
+        model = AutoModelForCausalLM.from_pretrained(f'./models/{model_name}')
+    else:
+        model = AutoModelForSeq2SeqLM.from_pretrained(f'./models/{model_name}')
+
+    # Load the tokenizer (the same for both model types)
     tokenizer = AutoTokenizer.from_pretrained(f'./models/{model_name}')
 
     # Tokenize the user input
@@ -89,12 +98,16 @@ def generate_response(model_name, user_input):
     return response
 
 if __name__ == "__main__":
-    model_name = sys.argv[1]  # Model name e.g., "fastchat-t5-3b-v1.0"
+    model_name = sys.argv[1]  # Model name e.g., "meta-llama/Llama-3.2-1B" or "fastchat-t5-3b-v1.0"
     user_input = sys.argv[2]  # User input (message)
 
     print(generate_response(model_name, user_input))
+
 ```
-2.  Test model python3 t5-small "What is new?"
+2.  Test model 
+python3 chat_with_model.py t5-small "What is new?"
+python3 chat_with_model.py fastchat-t5-3b "What is new?"
+python3 chat_with_model.py Llama-3.2-1B "What is new?"
 
 3. Run rails server
 
