@@ -1,7 +1,7 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 model_name = "meta-llama/Llama-3.2-1B"
-token = "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"
+token = "HUGGINGFACE_TOKEN"
 
 # Load the model and tokenizer
 model = AutoModelForCausalLM.from_pretrained(model_name, token=True)
